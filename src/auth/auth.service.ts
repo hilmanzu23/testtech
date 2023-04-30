@@ -4,7 +4,7 @@ import { LoginAuthDto } from './dto/login-auth.dto';
 import { User } from 'src/user/schemas/user.schema';
 import mongoose from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { comparePassword } from 'src/util/bcrypt';
+import { comparePassword } from 'src/core/util/bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
