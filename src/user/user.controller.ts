@@ -18,10 +18,10 @@ import { AuthGuard } from '../core/util/auth.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('user')
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.create(createUserDto);
-  }
+  // @Post('user')
+  // async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  //   return this.userService.create(createUserDto);
+  // }
 
   @UseGuards(AuthGuard)
   @Get('user')

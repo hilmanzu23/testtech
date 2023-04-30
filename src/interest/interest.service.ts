@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateInterestDto } from './dto/create-interest.dto';
 import { UpdateInterestDto } from './dto/update-interest.dto';
 import { Interest } from './schemas/interest.schema';
@@ -14,6 +14,7 @@ export class InterestService {
 
   async create(createInterestDto: CreateInterestDto) {
     const { name, idUser } = createInterestDto;
+    await this.checkAvailableInterest(name, idUser);
     const Interest = await this.interestModel.create({
       name: name,
       idUser: idUser,
@@ -28,5 +29,15 @@ export class InterestService {
 
   async remove(id: string): Promise<Interest> {
     return await this.interestModel.findByIdAndDelete(id);
+  }
+
+  async checkAvailableInterest(name: string, id: string) {
+    const interestDb = await this.interestModel.findOne({
+      name: name,
+      idUser: id,
+    });
+    if (interestDb)
+      throw new NotFoundException('Name Registered, choice another options');
+    return interestDb;
   }
 }

@@ -15,21 +15,17 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { email, password } = createUserDto;
-    const cekUser = await this.checkAvailableUser(email);
-    if (cekUser.length === 0) {
-      const hash = await encodePassword(password);
-      const users = await this.userModel.create(createUserDto);
-      return this.userModel.findByIdAndUpdate(
-        users.id,
-        { password: hash },
-        {
-          new: true,
-          runValidators: false,
-        },
-      );
-    } else {
-      throw new NotFoundException('Email Registered');
-    }
+    await this.checkAvailableUser(email);
+    const hash = await encodePassword(password);
+    const users = await this.userModel.create(createUserDto);
+    return this.userModel.findByIdAndUpdate(
+      users.id,
+      { password: hash },
+      {
+        new: true,
+        runValidators: false,
+      },
+    );
   }
 
   async findAll(): Promise<User[]> {
@@ -57,7 +53,8 @@ export class UserService {
   }
 
   async checkAvailableUser(email: string) {
-    const userDb = await this.userModel.find({ email: email });
+    const userDb = await this.userModel.findOne({ email: email });
+    if (userDb) throw new NotFoundException('Email Registered');
     return userDb;
   }
 }

@@ -25,8 +25,7 @@ export class AuthService {
       id: cekUserAvailable.id,
       fullName: cekUserAvailable.fullName,
       email: cekUserAvailable.email,
-      access_token: await this.jwtService.signAsync(payload),
-      refresh_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.signAsync(payload)
     };
     return resultValue;
   }
