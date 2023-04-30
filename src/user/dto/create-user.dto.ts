@@ -1,5 +1,10 @@
-import { Type } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  MinLength,
+} from 'class-validator';
 import mongoose from 'mongoose';
 
 export class CreateUserDto {
@@ -19,26 +24,22 @@ export class CreateUserDto {
   @MinLength(6)
   password: string;
 
-  salt: string;
-
-  @IsNotEmpty()
+  @IsString()
   gender: string;
 
-  @IsNotEmpty()
+  @IsString()
   birthday: Date;
 
-  @IsNotEmpty()
+  @IsString()
   horoscope: string;
 
-  @IsNotEmpty()
+  @IsString()
   zodiac: string;
 
-  @IsNotEmpty()
-  @Type(() => Number)
+  @IsNumber()
   height: number;
 
-  @IsNotEmpty()
-  @Type(() => Number)
+  @IsNumber()
   weight: number;
 
   imagePhoto: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png';

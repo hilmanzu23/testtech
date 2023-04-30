@@ -1,56 +1,32 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
+import { Injectable } from '@nestjs/common';
 import { CreateInterestDto } from './dto/create-interest.dto';
-import * as bcrypt from 'bcrypt';
+import { UpdateInterestDto } from './dto/update-interest.dto';
+import { Interest } from './schemas/interest.schema';
+import mongoose from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class InterestService {
-  private interest: any[] = [];
+  constructor(
+    @InjectModel(Interest.name)
+    private interestModel: mongoose.Model<Interest>,
+  ) {}
 
-  get(name: string, createdAt: string): any[] {
-    const data = this.interest.filter((items) => {
-      let isMatch = true;
-      if (name && items.name != name) {
-        isMatch = false;
-      }
-      if (createdAt && items.createdAt != createdAt) {
-        isMatch = false;
-      }
-      return isMatch;
+  async create(createInterestDto: CreateInterestDto) {
+    const { name, idUser } = createInterestDto;
+    const Interest = await this.interestModel.create({
+      name: name,
+      idUser: idUser,
     });
-    return data;
+    return Interest;
   }
 
-  getById(id: string): any[] {
-    const data = this.findById(id);
-    return this.interest[data];
+  async findAllById(idUser: string) {
+    const users = await this.interestModel.find({ idUser: idUser });
+    return users;
   }
 
-  async created(createInterestDto: CreateInterestDto) {
-    const { name, createdAt, password } = createInterestDto;
-    const userSalt = await bcrypt.genSalt();
-    return this.interest.push({
-      id: uuidv4(),
-      name,
-      createdAt,
-      salt: userSalt,
-      password: await bcrypt.hash(password, userSalt),
-    });
-  }
-
-  update(id: string, name: string, createdAt: string) {
-    const data = this.findById(id);
-    this.interest[data].name = name;
-    this.interest[data].createdAt = createdAt;
-  }
-
-  findById(id: string) {
-    const data = this.interest.findIndex((items) => items.id === id);
-    return data;
-  }
-
-  delete(id: string) {
-    const data = this.findById(id);
-    return this.interest.splice(data, 1);
+  async remove(id: string): Promise<Interest> {
+    return await this.interestModel.findByIdAndDelete(id);
   }
 }

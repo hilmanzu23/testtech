@@ -4,9 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { User } from './schemas/user.schema';
-import { v4 as uuidv4 } from 'uuid';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
+import { encodePassword } from 'src/util/bcrypt';
 
 @Injectable()
 export class UserService {
@@ -16,17 +14,22 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { password, email, fullName } = createUserDto;
-    const makeSalt = await bcrypt.genSalt();
-    const user = new User();
-
-    user.password = await bcrypt.hash(password, makeSalt);
-    user.salt = makeSalt;
-    user.email = email;
-    user.fullName = fullName;
-
-    const users = await this.userModel.create(user);
-    return users;
+    const { email, password } = createUserDto;
+    const cekUser = await this.checkAvailableUser(email);
+    if (cekUser.length === 0) {
+      const hash = await encodePassword(password);
+      const users = await this.userModel.create(createUserDto);
+      return this.userModel.findByIdAndUpdate(
+        users.id,
+        { password: hash },
+        {
+          new: true,
+          runValidators: false,
+        },
+      );
+    } else {
+      throw new NotFoundException('Email Registered');
+    }
   }
 
   async findAll(): Promise<User[]> {
@@ -37,9 +40,9 @@ export class UserService {
   async findOne(id: string): Promise<User> {
     const data = await this.userModel.findById(id);
     if (data.id === undefined) {
-      throw new NotFoundException('data tidak di temukan');
+      throw new NotFoundException('User Not Found');
     }
-    return data.id;
+    return data;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
@@ -51,5 +54,10 @@ export class UserService {
 
   async remove(id: string): Promise<User> {
     return await this.userModel.findByIdAndDelete(id);
+  }
+
+  async checkAvailableUser(email: string) {
+    const userDb = await this.userModel.find({ email: email });
+    return userDb;
   }
 }

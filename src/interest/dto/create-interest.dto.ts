@@ -1,16 +1,12 @@
-/* eslint-disable prettier/prettier */
-import { Type } from 'class-transformer';
-import { IsString, MinLength } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
+import mongoose from 'mongoose';
 
 export class CreateInterestDto {
-  @IsString()
+  _id: mongoose.Types.ObjectId;
+
+  @IsNotEmpty()
   name: string;
 
-  @IsString()
-  createdAt: string;
-
-  @MinLength(5, {
-    message: 'maksimum 5 karakter',
-  })
-  password: string;
+  @IsNotEmpty()
+  idUser: string;
 }
