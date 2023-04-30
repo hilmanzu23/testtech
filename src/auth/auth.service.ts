@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException, UseGuards } from '@nestjs/common';
 import { LoginAuthDto } from './dto/login-auth.dto';
-import { User } from 'src/user/schemas/user.schema';
+import { User } from '../user/schemas/user.schema';
 import mongoose from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { comparePassword } from 'src/core/util/bcrypt';
+import { comparePassword } from '../core/util/bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

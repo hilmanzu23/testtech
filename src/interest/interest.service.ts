@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateInterestDto } from './dto/create-interest.dto';
-import { UpdateInterestDto } from './dto/update-interest.dto';
 import { Interest } from './schemas/interest.schema';
 import mongoose from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';

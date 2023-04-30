@@ -12,8 +12,8 @@ import { InterestModule } from './interest/interest.module';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.DB_URI),
-    UserModule,
     AuthModule,
+    UserModule,
     InterestModule,
   ],
 })
