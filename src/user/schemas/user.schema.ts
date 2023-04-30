@@ -11,9 +11,6 @@ export class User {
   password: string;
 
   @Prop()
-  salt: string;
-
-  @Prop()
   fullName: string;
 
   @Prop()
@@ -35,7 +32,7 @@ export class User {
   weight: string;
 
   @Prop()
-  imagePhoto: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png';
+  imagePhoto: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

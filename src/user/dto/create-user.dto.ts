@@ -52,5 +52,12 @@ export class CreateUserDto {
   @ApiProperty({ type: Number, description: 'if null please input ""' })
   weight: number;
 
-  imagePhoto: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png';
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    type: String,
+    description:
+      'Please input default image => https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
+  })
+  imagePhoto: string;
 }

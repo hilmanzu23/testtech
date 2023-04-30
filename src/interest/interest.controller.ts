@@ -10,9 +10,15 @@ import {
 import { InterestService } from './interest.service';
 import { CreateInterestDto } from './dto/create-interest.dto';
 import { AuthGuard } from '../core/util/auth.guard';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCookieAuth,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiBearerAuth()
+@ApiCookieAuth()
 @ApiTags('Interest')
 @Controller('api')
 export class InterestController {

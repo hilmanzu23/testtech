@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { User } from './schemas/user.schema';
 import { encodePassword } from '../core/util/bcrypt';
+import { Interest } from './../interest/schemas/interest.schema';
 
 @Injectable()
 export class UserService {
@@ -33,12 +34,26 @@ export class UserService {
     return users;
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOne(id: string, interest: any): Promise<User> {
     const data = await this.userModel.findById(id);
     if (data.id === undefined) {
       throw new NotFoundException('User Not Found');
     }
-    return data;
+    const result = {
+      _id: data.id,
+      email: data.email,
+      fullName: data.fullName,
+      password: data.password,
+      gender: data.gender,
+      birthday: data.birthday,
+      horoscope: data.horoscope,
+      zodiac: data.zodiac,
+      height: data.height,
+      weight: data.weight,
+      imagePhoto: data.imagePhoto,
+      tag: interest,
+    };
+    return result;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

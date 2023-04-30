@@ -20,13 +20,17 @@ import {
   ApiCreatedResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { InterestService } from 'src/interest/interest.service';
 
 @ApiBearerAuth()
 @ApiCookieAuth()
 @ApiTags('User')
 @Controller('api')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly interestService: InterestService,
+  ) {}
 
   // @Post('user')
   // async create(@Body() createUserDto: CreateUserDto): Promise<User> {
@@ -43,8 +47,9 @@ export class UserController {
   @ApiCreatedResponse({ description: 'get profile user' })
   @Get('getProfile/:id')
   @UseGuards(AuthGuard)
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<User> {
+    const interest = await this.interestService.findAllById(id);
+    return this.userService.findOne(id, interest);
   }
 
   @ApiCreatedResponse({ description: 'update profile user' })
