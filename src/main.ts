@@ -18,6 +18,7 @@ async function bootstrap() {
       persistAuthorization: true,
     },
   });
-  await app.listen(3000, '0.0.0.0');
+  const port = process.env.PORT || 8080;
+  await app.listen(port, '0.0.0.0');
 }
 bootstrap();
