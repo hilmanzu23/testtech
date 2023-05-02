@@ -1,7 +1,7 @@
 ## Description
 
-Standard framework TypeScript starter repository.
-for tools studied by Hilyathul Wahid
+Standard framework TypeScript starter repository. by Hilyathul Wahid
+
 
 ## Installation
 
