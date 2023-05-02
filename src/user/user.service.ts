@@ -6,20 +6,23 @@ import * as mongoose from 'mongoose';
 import { User } from './schemas/user.schema';
 import { encodePassword } from '../core/util/bcrypt';
 import { Interest } from './../interest/schemas/interest.schema';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name)
     private userModel: mongoose.Model<User>,
+    private jwtService: JwtService,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
     await this.checkAvailableUser(email);
     const hash = await encodePassword(password);
     const users = await this.userModel.create(createUserDto);
-    return this.userModel.findByIdAndUpdate(
+    const payload = { id: users._id, email: users.email };
+    await this.userModel.findByIdAndUpdate(
       users.id,
       { password: hash },
       {
@@ -27,6 +30,10 @@ export class UserService {
         runValidators: false,
       },
     );
+    return {
+      data: users,
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 
   async findAll(): Promise<User[]> {
