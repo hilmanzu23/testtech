@@ -53,3 +53,8 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
+## Frontend Documentation Test Endpoint
+
+```bash
+$ visit https://testtech-6dqwf753sq-uc.a.run.app/api-docs
+```
