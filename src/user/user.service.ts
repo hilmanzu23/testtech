@@ -5,7 +5,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { User } from './schemas/user.schema';
 import { encodePassword } from '../core/util/bcrypt';
-import { Interest } from './../interest/schemas/interest.schema';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
